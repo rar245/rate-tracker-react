@@ -6,7 +6,7 @@ export default function App() {
 
   useEffect(() => {
     // We fetch the data from your OTHER repo automatically!
-    const DATA_URL = "https://raw.githubusercontent.com/rar245/rate-tracker/main/data/rates.json";
+    const DATA_URL = "https://cdn.jsdelivr.net/gh/rar245/rate-tracker@main/data/rates.json";
     fetch(DATA_URL)
       .then(res => res.json())
       .then(json => setData(json));

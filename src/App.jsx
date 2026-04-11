@@ -13,7 +13,7 @@ export default function App() {
   const [banks, setBanks] = useState([]);
 
   useEffect(() => {
-    const DATA_URL = "https://rate-tracker-alpha.vercel.app/data/rates.json";
+    const DATA_URL = "https://rate-tracker-lovat.vercel.app/data/rates.json";
     fetch(DATA_URL)
       .then(res => res.json())
       .then(json => {

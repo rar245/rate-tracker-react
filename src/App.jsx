@@ -11,6 +11,8 @@ const BANK_COLORS = {
 export default function App() {
   const [data, setData] = useState([]);
   const [banks, setBanks] = useState([]);
+  // This state tracks which banks are hidden
+  const [hiddenBanks, setHiddenBanks] = useState([]);
 
   useEffect(() => {
     const DATA_URL = "https://rate-tracker-lovat.vercel.app/data/rates.json";
@@ -26,12 +28,22 @@ export default function App() {
       .catch(err => console.error("Fetch error:", err));
   }, []);
 
+  // Function to toggle the bank visibility when legend is clicked
+  const handleLegendClick = (e) => {
+    const { dataKey } = e;
+    if (hiddenBanks.includes(dataKey)) {
+      setHiddenBanks(hiddenBanks.filter(b => b !== dataKey));
+    } else {
+      setHiddenBanks([...hiddenBanks, dataKey]);
+    }
+  };
+
   return (
     <div style={{ padding: '20px', backgroundColor: '#f0f2f5', minHeight: '100vh', fontFamily: 'sans-serif' }}>
       <div style={{ maxWidth: '1000px', margin: '0 auto', background: '#fff', padding: '40px', borderRadius: '15px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
         <div style={{ textAlign: 'center', marginBottom: '30px' }}>
           <h1 style={{ margin: 0, color: '#1a1a1a' }}>The Loyalty Tax</h1>
-          <p style={{ color: '#666' }}>Big Banks vs. High-Yield Reality</p>
+          <p style={{ color: '#666' }}>Click a bank in the legend to show/hide its line</p>
         </div>
         <div style={{ width: '100%', height: 500 }}>
           <ResponsiveContainer>
@@ -40,7 +52,12 @@ export default function App() {
               <XAxis dataKey="date" tick={{ fontSize: 12 }} />
               <YAxis unit="%" domain={[0, 'auto']} tick={{ fontSize: 12 }} />
               <Tooltip />
-              <Legend verticalAlign="bottom" height={36} />
+              <Legend 
+                verticalAlign="bottom" 
+                height={36} 
+                onClick={handleLegendClick}
+                style={{ cursor: 'pointer' }}
+              />
               {banks.map((bank) => (
                 <Line
                   key={bank}
@@ -51,6 +68,7 @@ export default function App() {
                   dot={{ r: 4 }}
                   activeDot={{ r: 8 }}
                   connectNulls={true}
+                  hide={hiddenBanks.includes(bank)}
                 />
               ))}
             </LineChart>
@@ -60,4 +78,3 @@ export default function App() {
     </div>
   );
 }
-// END OF FILE - ENSURE THE CLOSING BRACKET ABOVE IS PRESENT

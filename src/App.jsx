@@ -72,7 +72,8 @@ const App = () => {
           xAxis: { type: 'category', data: dates, boundaryGap: false },
           yAxis: { 
             type: 'value', 
-            min: (value) => (value.min > 1 ? Math.floor(value.min) : 0),
+            // 'dataMin' makes the chart zoom into the current rate range
+            min: 'dataMin',
             axisLabel: { formatter: '{value}%' } 
           },
           series: series

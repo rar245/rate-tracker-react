@@ -15,7 +15,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    const dataUrl = `https://raw.githubusercontent.com/rar245/rate-tracker/main/data/rates.json?t=${new Date().getTime()}`;
+    const dataUrl = `https://github.com/rar245/rate-tracker/raw/refs/heads/main/data/rates.json?t=${new Date().getTime()}`;
 
     fetch(dataUrl)
       .then((res) => res.json())

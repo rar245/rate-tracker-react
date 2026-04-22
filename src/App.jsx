@@ -5,13 +5,22 @@ const App = () => {
   const [chartOptions, setChartOptions] = useState({});
   const [loading, setLoading] = useState(true);
 
-  // Expanded color map to cover all potential banks
+ // Branding colors for all your tracked High Yield accounts
   const bankColors = {
-    "Marcus": "#003366", "Discover": "#FF6600", "Capital One": "#D10032",
-    "Amex": "#0070D1", "Ally": "#500078", "SoFi": "#00C2FF",
-    "Wealthfront": "#8E44AD", "Axos Bank": "#000000", "CIT Bank": "#2E8B57",
-    "EverBank": "#C0C0C0", "Newtek": "#005596", "LendingClub": "#00A1E0",
-    "BrioDirect": "#6CC24A", "Bread Savings": "#F2AF00", "National Avg": "#666666"
+    "Marcus": "#003366",        // Marcus Blue
+    "Newtek": "#005596",        // Newtek Blue
+    "EverBank": "#0072CE",      // EverBank Blue
+    "Axos Bank": "#000000",     // Axos Black
+    "Bread Savings": "#F2AF00", // Bread Financial Gold/Yellow
+    "CIT Bank": "#2E8B57",      // CIT Green
+    "SoFi": "#00C2FF",          // SoFi Cyan
+    "Ally": "#500078",          // Ally Purple
+    "Discover": "#FF6600",      // Discover Orange
+    "Capital One": "#D10032",   // CapOne Red
+    "Amex": "#0070D1",          // Amex Blue
+    "Wealthfront": "#8E44AD",   // Wealthfront Purple
+    "LendingClub": "#00A1E0",   // LendingClub Blue
+    "BrioDirect": "#6CC24A"     // Brio Green
   };
 
   useEffect(() => {

@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactECharts from 'echarts-for-react';
+// Ensure this filename matches your local file exactly
 import ratesData from './rates_no_robinhood.json';
 
 const App = () => {
@@ -20,9 +21,8 @@ const App = () => {
       borderColor: '#ccc',
       padding: 10,
       textStyle: { color: '#000' },
-      // Important: Order by rate so the top-paying bank is first in the tooltip
       order: 'seriesDesc', 
-      valueFormatter: (value) => value ? value.toFixed(2) + '%' : 'N/A'
+      valueFormatter: (value) => (value != null ? value.toFixed(2) + '%' : 'N/A')
     },
     legend: {
       data: bankNames,
@@ -37,16 +37,9 @@ const App = () => {
       bottom: 100,
       containLabel: true
     },
-    // Allows you to zoom into the 2022-2026 rate hike era
     dataZoom: [
-      {
-        type: 'slider',
-        start: 85, // Starts zoomed into the most recent ~15% of the timeline
-        end: 100
-      },
-      {
-        type: 'inside'
-      }
+      { type: 'slider', start: 85, end: 100 },
+      { type: 'inside' }
     ],
     xAxis: {
       type: 'time',
@@ -57,35 +50,52 @@ const App = () => {
       type: 'value',
       name: 'APY (%)',
       min: 'dataMin',
-      axisLabel: {
-        formatter: '{value}%'
-      },
-      splitLine: {
-        lineStyle: { type: 'dashed', color: '#eee' }
-      }
+      axisLabel: { formatter: '{value}%' },
+      splitLine: { lineStyle: { type: 'dashed', color: '#eee' } }
     },
     series: bankNames.map(bank => ({
       name: bank,
       type: 'line',
-      // KEY FIXES:
-      step: 'end',        // Ensures vertical drops/jumps
-      connectNulls: true, // Bridges the 'null' entries in the synchronized JSON
-      symbol: 'none',     // Cleaner professional look
+      step: 'end',
+      connectNulls: true,
+      symbol: 'none',
       lineStyle: { width: 2 },
       emphasis: { focus: 'series', lineStyle: { width: 4 } },
       data: ratesData.map(item => [item.date, item[bank]])
     }))
   };
 
+  // Styles defined as a constant to avoid inline string issues
+  const containerStyle = { 
+    width: '100%', 
+    height: '100vh', 
+    padding: '20px', 
+    backgroundColor: '#f9f9f9' 
+  };
+  
+  const chartWrapperStyle = { 
+    backgroundColor: '#fff', 
+    padding: '20px', 
+    borderRadius: '12px', 
+    boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+    height: '90%'
+  };
+
   return (
-    <div style={{ width: '100%', height: '100vh', padding: '20px', backgroundColor: '#f9f9f9' }}>
-      <div style={{ 
-        backgroundColor: '#fff', 
-        padding: '20px', 
-        borderRadius: '12px', 
-        boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-        height: '90%'
-      }}>
+    <div style={containerStyle}>
+      <div style={chartWrapperStyle}>
         <ReactECharts 
           option={option} 
-          style={{ height: '100%', width: '
+          style={{ height: '100%', width: '100%' }}
+          notMerge={true}
+          lazyUpdate={true}
+        />
+      </div>
+      <p style={{ textAlign: 'center', marginTop: '15px', color: '#666', fontSize: '12px' }}>
+        Note: Chart reflects explicit rate change dates. Horizontal lines between points represent maintained rates.
+      </p>
+    </div>
+  );
+};
+
+export default App;

@@ -1,41 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import ReactECharts from 'echarts-for-react';
+// This import is now "local" to the src folder
+import ratesData from './rates.json';
 
 const App = () => {
-  const [ratesData, setRatesData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  // The "Source of Truth" URL from your other repository
-  const DATA_URL = "https://raw.githubusercontent.com/rar245/rate-tracker/main/data/rates.json";
-
-  useEffect(() => {
-    fetch(DATA_URL)
-      .then(response => {
-        if (!response.ok) throw new Error('Failed to fetch rates data');
-        return response.json();
-      })
-      .then(data => {
-        setRatesData(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error(err);
-        setError(err.message);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) return <div style={{ padding: '40px', textAlign: 'center' }}>Syncing with Master Rate File...</div>;
-  if (error) return <div style={{ padding: '40px', color: 'red' }}>Error: {error}</div>;
-
   // Extract bank names from the first data entry (excluding 'date')
   const bankNames = Object.keys(ratesData[0]).filter(key => key !== 'date');
 
   const option = {
     title: {
       text: 'Historical Savings APY Trends',
-      subtext: 'Live Sync from rar245/rate-tracker',
+      subtext: 'Internal Data Source',
       left: 'center'
     },
     tooltip: {

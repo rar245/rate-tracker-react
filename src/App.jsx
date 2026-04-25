@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactECharts from 'echarts-for-react';
-// This import is now "local" to the src folder
 import ratesData from './rates.json';
 
 const App = () => {
@@ -9,56 +8,68 @@ const App = () => {
 
   const option = {
     title: {
-      text: 'Historical Savings APY Trends',
-      subtext: 'Internal Data Source',
-      left: 'center'
+      text: 'APY Performance Tracking (2009 - 2026)',
+      left: 'center',
+      textStyle: { fontWeight: 'normal', color: '#333' }
     },
     tooltip: {
       trigger: 'axis',
-      backgroundColor: 'rgba(255, 255, 255, 0.9)',
-      order: 'seriesDesc',
+      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+      order: 'seriesDesc', // Keeps the highest rates at the top of the list
       valueFormatter: (value) => (value != null ? value.toFixed(2) + '%' : 'N/A')
     },
     legend: {
       data: bankNames,
       type: 'scroll',
-      bottom: 50
+      bottom: 10
+    },
+    grid: {
+      top: 60,
+      left: '3%',
+      right: '4%',
+      bottom: 80,
+      containLabel: true
     },
     dataZoom: [
-      { type: 'slider', start: 85, end: 100 },
+      { type: 'slider', start: 90, end: 100 }, // Defaults to a zoomed-in recent view
       { type: 'inside' }
     ],
     xAxis: {
       type: 'time',
-      boundaryGap: false
+      boundaryGap: false,
+      axisLine: { lineStyle: { color: '#888' } }
     },
     yAxis: {
       type: 'value',
       name: 'APY (%)',
-      min: 'dataMin',
-      axisLabel: { formatter: '{value}%' }
+      min: 'dataMin', // Focuses Y-axis only on the range where data exists
+      axisLabel: { formatter: '{value}%' },
+      splitLine: { lineStyle: { type: 'dashed' } }
     },
     series: bankNames.map(bank => ({
       name: bank,
       type: 'line',
-      step: 'end',
-      connectNulls: true,
-      symbol: 'none',
+      // --- THE "SMOOTHNESS" SETTINGS ---
+      step: 'end',        // Forces vertical/horizontal "staircase" transitions
+      connectNulls: true, // Prevents the line from breaking between update dates
+      symbol: 'none',     // Removes the "dots" for a cleaner, unified line look
+      // ---------------------------------
+      lineStyle: { width: 2 },
+      emphasis: { 
+        focus: 'series',  // Highlights the hovered bank and fades others
+        lineStyle: { width: 3 } 
+      },
       data: ratesData.map(item => [item.date, item[bank]])
     }))
   };
 
   return (
-    <div style={{ width: '100%', height: '100vh', padding: '20px', boxSizing: 'border-box' }}>
-      <div style={{ height: '90%', backgroundColor: '#fff', borderRadius: '8px', padding: '10px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-        <ReactECharts 
-          option={option} 
-          style={{ height: '100%', width: '100%' }}
-          notMerge={true}
-        />
-      </div>
-    </div>
-  );
-};
-
-export default App;
+    <div style={{ width: '100%', height: '100vh', backgroundColor: '#f4f7f6', padding: '20px', boxSizing: 'border-box' }}>
+      <div style={{ 
+        height: '100%', 
+        backgroundColor: '#fff', 
+        borderRadius: '12px', 
+        padding: '15px', 
+        boxShadow: '0 10px 30px rgba(0,0,0,0.05)' 
+      }}>
+        <ReactECharts

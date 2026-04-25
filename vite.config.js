@@ -1,12 +1,19 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import path from 'path'
 
 export default defineConfig({
   plugins: [react()],
-  build: {
-    outDir: 'dist', // Ensures Vercel finds the output
+  resolve: {
+    alias: {
+      // This creates a shortcut so you don't have to use ../../
+      '@shared': path.resolve(__dirname, '../data'),
+    },
   },
   server: {
-    historyApiFallback: true, // Helps with routing
-  }
+    fs: {
+      // This is the critical security bypass
+      allow: ['..'], 
+    },
+  },
 })

@@ -3,7 +3,6 @@ import ReactECharts from 'echarts-for-react';
 import ratesData from './rates.json';
 
 const App = () => {
-  // Extract bank names from the first data entry (excluding 'date')
   const bankNames = Object.keys(ratesData[0]).filter(key => key !== 'date');
 
   const option = {
@@ -19,19 +18,30 @@ const App = () => {
       valueFormatter: (value) => (value != null ? value.toFixed(2) + '%' : 'N/A')
     },
     legend: {
-      data: bankNames,
-      type: 'scroll',
-      bottom: 10
+      // Changed from 'scroll' to 'plain' to show all banks at once
+      type: 'plain', 
+      bottom: 0,      // Anchored to the very bottom
+      left: 'center',
+      orient: 'horizontal',
+      padding: [0, 5, 10, 5],
+      textStyle: { fontSize: 11 }
     },
     grid: {
       top: 60,
       left: '3%',
       right: '4%',
-      bottom: 80,
+      // Increased bottom margin significantly to fit both the slider and the full list of banks
+      bottom: 160, 
       containLabel: true
     },
     dataZoom: [
-      { type: 'slider', start: 90, end: 100 },
+      { 
+        type: 'slider', 
+        start: 90, 
+        end: 100,
+        bottom: 80,   // Moved up to sit between the chart and the legend
+        height: 25    // Slimmer bar to save space
+      },
       { type: 'inside' }
     ],
     xAxis: {
@@ -62,13 +72,15 @@ const App = () => {
   };
 
   return (
-    <div style={{ width: '100%', height: '100vh', backgroundColor: '#f4f7f6', padding: '20px', boxSizing: 'border-box' }}>
+    <div style={{ width: '100%', height: '100vh', backgroundColor: '#f4f7f6', padding: '10px', boxSizing: 'border-box' }}>
       <div style={{ 
         height: '100%', 
         backgroundColor: '#fff', 
         borderRadius: '12px', 
-        padding: '15px', 
-        boxShadow: '0 10px 30px rgba(0,0,0,0.05)' 
+        padding: '10px', 
+        boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
+        display: 'flex',
+        flexDirection: 'column'
       }}>
         <ReactECharts 
           option={option} 

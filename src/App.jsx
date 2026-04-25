@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactECharts from 'echarts-for-react';
 // Corrected to your filename
-import ratesData from './rates.json';
+import ratesData from '../rates.json';
 
 const App = () => {
   // Logic to handle empty or malformed data safety

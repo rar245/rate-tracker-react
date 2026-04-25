@@ -15,7 +15,7 @@ const App = () => {
     tooltip: {
       trigger: 'axis',
       backgroundColor: 'rgba(255, 255, 255, 0.95)',
-      order: 'seriesDesc', // Keeps the highest rates at the top of the list
+      order: 'seriesDesc',
       valueFormatter: (value) => (value != null ? value.toFixed(2) + '%' : 'N/A')
     },
     legend: {
@@ -31,7 +31,7 @@ const App = () => {
       containLabel: true
     },
     dataZoom: [
-      { type: 'slider', start: 90, end: 100 }, // Defaults to a zoomed-in recent view
+      { type: 'slider', start: 90, end: 100 },
       { type: 'inside' }
     ],
     xAxis: {
@@ -42,21 +42,19 @@ const App = () => {
     yAxis: {
       type: 'value',
       name: 'APY (%)',
-      min: 'dataMin', // Focuses Y-axis only on the range where data exists
+      min: 'dataMin',
       axisLabel: { formatter: '{value}%' },
       splitLine: { lineStyle: { type: 'dashed' } }
     },
     series: bankNames.map(bank => ({
       name: bank,
       type: 'line',
-      // --- THE "SMOOTHNESS" SETTINGS ---
-      step: 'end',        // Forces vertical/horizontal "staircase" transitions
-      connectNulls: true, // Prevents the line from breaking between update dates
-      symbol: 'none',     // Removes the "dots" for a cleaner, unified line look
-      // ---------------------------------
+      step: 'end',
+      connectNulls: true,
+      symbol: 'none',
       lineStyle: { width: 2 },
       emphasis: { 
-        focus: 'series',  // Highlights the hovered bank and fades others
+        focus: 'series',
         lineStyle: { width: 3 } 
       },
       data: ratesData.map(item => [item.date, item[bank]])
@@ -72,4 +70,14 @@ const App = () => {
         padding: '15px', 
         boxShadow: '0 10px 30px rgba(0,0,0,0.05)' 
       }}>
-        <ReactECharts
+        <ReactECharts 
+          option={option} 
+          style={{ height: '100%', width: '100%' }}
+          notMerge={true}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default App;
